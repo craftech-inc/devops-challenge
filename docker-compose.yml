@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres
+    container_name: dbase
+    environment:
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=usuario123
+      - POSTGRES_DB=postgredb
+    volumes:
+      - ../db:/var/lib/postgresql/data
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - SECRET_KEY=c&$r#6+1=*+_cf=u@jgjwl&z79pg5($h^*11k2g@2&z(w(han_
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=postgredb
+      - DB_USER=usuario
+      - DB_PASS=usuario123
+      - DB_HOST=db
+      - DB_PORT=5432
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: back
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm run start
+    container_name: front
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
