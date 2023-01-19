@@ -10,6 +10,7 @@ services:
       - ../db:/var/lib/postgresql/data
   
   backend:
+    image: craft_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -29,6 +30,7 @@ services:
       - db
 
   frontend:
+    image: craft_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
